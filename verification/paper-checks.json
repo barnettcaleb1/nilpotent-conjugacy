@@ -1,0 +1,10 @@
+{
+  "recorded_at": "2026-10-06T17:49:20.800772+00:00",
+  "compiler": "Codex built-in standalone LaTeX compiler",
+  "status": "success",
+  "scope": "Both exact sources compiled. No separate PDF export or rendered-page inspection is claimed.",
+  "documents": {
+    "paper/preprint.tex": "1e86378f86d0782e1ffd5866204a8a9c41ee8c3ea23f1e8a7ad9f41192309cf1",
+    "paper/exposition.tex": "beb6cb8953bfbae63b2b88c6fc59561412d6c849b2f45c183406962619f75f61"
+  }
+}

@@ -1,0 +1,9 @@
+Cubic lower bounds for conjugacy separation in nilpotent groups
+Caleb Barnett
+Unverified draft — 6 October 2026
+
+This draft proposes a family of torsion-free finitely generated nilpotent groups with conjugacy separability growth that would rule out a universal quadratic bound on the exponent in terms of Hirsch length. If verified, the construction, together with an existing upper bound, would establish cubic order for a universal exponent bound, up to constants.
+
+Prepared with AI assistance. The arguments and claimed results have not yet been independently verified and should be treated as provisional. Comments and corrections are welcome.
+
+A companion Lean package checks selected algebraic lemmas; it does not formally verify the main theorem. Code and verification scope: https://github.com/barnettcaleb1/nilpotent-conjugacy

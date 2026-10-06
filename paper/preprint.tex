@@ -1,0 +1,760 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1.1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{
+  pdftitle={Cubic lower bounds for conjugacy separation in nilpotent groups (unverified draft)},
+  pdfauthor={Caleb Barnett},
+  pdfsubject={Unverified research draft; independent verification is pending.}}
+\pagestyle{myheadings}
+\markright{\normalfont\small Unverified draft --- 6 October 2026}
+\numberwithin{equation}{section}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\Conj}{\operatorname{Conj}}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\ad}{\operatorname{ad}}
+\newcommand{\ord}{\operatorname{ord}}
+\newcommand{\Gp}{\mathcal G}
+\title{Cubic lower bounds for conjugacy separation\\in nilpotent groups}
+\author{Caleb Barnett}
+\date{6 October 2026}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+\textbf{UNVERIFIED DRAFT}\\[6pt]
+\begin{minipage}{0.92\textwidth}
+\small
+This manuscript presents a proposed proof and is circulated for comment.
+The arguments and claimed results have not yet been independently
+verified. It was prepared with AI assistance; internal AI-assisted
+checks do not establish mathematical correctness. The conclusions
+should be treated as provisional. Selected algebraic lemmas have been
+formalized in Lean; the main theorem has not. The scope and remaining
+formal proof obligations are listed in the
+\href{https://github.com/barnettcaleb1/nilpotent-conjugacy}{companion repository}.
+Comments and corrections are welcome.
+\end{minipage}
+\end{center}
+
+\begin{abstract}
+This draft proposes a construction of a torsion-free finitely generated
+nilpotent group of Hirsch length $8d$ for every integer $d\ge2$, with
+a claimed lower bound $n^{3d^2(d+1)}$ for its conjugacy separability
+growth. If verified, this would give a negative answer to Question~1
+of Der\'e and Vandeputte on the existence of a universal quadratic
+bound, in Hirsch length, for the degree of this growth function.
+Together with their upper bound, it would show that cubic order in
+Hirsch length is necessary and sufficient for a universal degree
+bound, up to absolute constants. The argument uses integral
+semidirect products, an elementary word compression estimate, and
+characters of finite abelian normal subgroups. It addresses arbitrary
+finite quotients separating the selected pairs and gives explicit
+finite separating quotients. Independent verification of the claims
+is pending.
+\end{abstract}
+
+\section{Introduction}
+
+Let $G$ be a finitely generated group, and let $S$ be a finite generating
+set. We write $|g|_S$ for word length with respect to $S\cup S^{-1}$.
+For nonconjugate elements $a,b\in G$, their conjugacy separation depth is
+\[
+ D_G(a,b)=\min\bigl\{|Q|:\ \varphi:G\twoheadrightarrow Q,\quad
+ Q\text{ finite},\quad \varphi(a)\not\sim_Q\varphi(b)\bigr\},
+\]
+where $\sim_Q$ denotes conjugacy in $Q$. We allow the value $+\infty$
+if no such quotient exists. The conjugacy separability growth function is
+\[
+ \Conj_{G,S}(n)=\max\bigl\{D_G(a,b):\ |a|_S,|b|_S\le n,
+ \quad a\not\sim_G b\bigr\},
+\]
+with value $1$ when the set is empty. Finitely generated nilpotent groups
+are conjugacy separable, so this function is finite for the groups under
+consideration; see \cite[Introduction]{DV}.
+
+For nondecreasing functions on the positive integers, write $f\preceq g$
+if there is an integer $C\ge1$ such that $f(n)\le Cg(Cn)$ for every
+$n\ge1$, and write $f\simeq g$ if both comparisons hold. We use
+$f\succeq g$ to mean $g\preceq f$. Changing the finite generating set
+does not change the resulting growth class, since the corresponding word
+lengths are bounded by constant multiples of one another. We therefore
+omit $S$ in statements made up to this comparison. All multiplicative
+constants may depend on the fixed group and generating set.
+
+Der\'e and Vandeputte prove an upper bound for this function in terms of
+the nilpotency class and Hirsch length \cite[Theorem~A]{DV}. They ask
+whether there is an absolute constant $C>0$ such that
+\begin{equation}\label{eq:question}
+ \Conj_G(n)\preceq n^{C h(G)^2}
+\end{equation}
+for every torsion-free finitely generated nilpotent group $G$
+\cite[Question~1, Section~3.2]{DV}. Here $h(G)$ denotes the Hirsch length.
+The proposed main result is the following.
+
+\begin{theorem}\label{thm:main}
+For every integer $d\ge2$, there is a torsion-free finitely generated
+nilpotent group $\Gp_d$ of class $4d$ and Hirsch length $8d$ such that
+\[
+ \Conj_{\Gp_d}(n)\succeq n^{3d^2(d+1)}.
+\]
+More precisely, for every finite generating set $S$ of $\Gp_d$, there
+are constants $c_{d,S}>0$ and $n_{d,S}\ge1$ such that
+\[
+ \Conj_{\Gp_d,S}(n)\ge c_{d,S} n^{3d^2(d+1)}
+ \qquad\text{for every integer }n\ge n_{d,S}.
+\]
+Consequently, no absolute constant $C$ satisfies \eqref{eq:question}.
+\end{theorem}
+
+The ratio of the exponent in Theorem~\ref{thm:main} to the square of
+the Hirsch length is
+\[
+ \frac{3d^2(d+1)}{(8d)^2}=\frac{3(d+1)}{64},
+\]
+which tends to infinity. The lower bound is obtained by fixing a single
+group $\Gp_d$ and a single prime $p>4d$, and then varying an integer
+parameter $s\ge1$ in a sequence of pairs of elements.
+
+If verified, the claimed lower bound would also determine the order of
+the optimal universal exponent bound as a function of Hirsch length.
+
+\begin{corollary}\label{cor:envelope}
+Every torsion-free finitely generated nilpotent group $G$ satisfies
+\[
+ \Conj_G(n)\preceq n^{h(G)^3}.
+\]
+There is an absolute constant $c_0>0$ and a sequence of such groups
+$G$ with unbounded Hirsch length for which
+\[
+ \Conj_G(n)\succeq n^{c_0 h(G)^3}.
+\]
+In particular, no function $E:\mathbb N_0\to[0,\infty)$ with
+$E(h)=o(h^3)$ can satisfy $\Conj_G(n)\preceq n^{E(h(G))}$ for all
+torsion-free finitely generated nilpotent groups $G$.
+\end{corollary}
+
+\begin{proof}
+Suppose first that $G$ is nonabelian. Put $h=h(G)$, let $k$ be its
+nilpotency class, and put $z=h(Z(G))$ and $r_0=h([G,G])$.
+By \cite[Theorem~A]{DV},
+\[
+ \Conj_G(n)\preceq n^{(k-1)(h-z+1)r_0}.
+\]
+The inequalities $k-1\le h$, $z\ge1$, and $r_0\le h$ bound this exponent
+by $h^3$. If $G$ is nontrivial abelian, its growth is equivalent to
+$\log n$ by \cite[Proposition~2.1.9]{DV}; the trivial group has constant
+growth. This proves the upper bound. For the lower bound, take
+$G=\Gp_d$ and $c_0=3/512$, since
+\[
+ \frac{3d^2(d+1)}{(8d)^3}=\frac{3(d+1)}{512d}\ge\frac{3}{512}.
+\]
+For any proposed function $E=o(h^3)$, choose one sufficiently large
+$d$ so that $E(8d)<c_0(8d)^3$. The two polynomial bounds in this fixed
+group are then incompatible as $n\to\infty$.
+\end{proof}
+
+The groups in the proof have the form $G(m)=\Z^m\rtimes H$, where
+$H$ is itself an abelian-by-cyclic nilpotent group. Two actions on the
+normal subgroup $\Z^m$ play different roles. One produces a bidiagonal
+conjugacy equation; the other forces sufficiently many matrix units to
+act on the abelian subgroup in every finite quotient. A character
+detecting the chosen conjugacy obstruction then gives many independent
+characters of large order. Section~\ref{sec:compression} supplies the
+word estimates, and Sections~\ref{sec:group}--\ref{sec:finish} give the
+construction and quotient argument.
+
+Throughout, group commutators are $[x,y]=xyx^{-1}y^{-1}$, vectors are
+columns, and exponentials and logarithms of nilpotent or unipotent
+matrices are finite polynomial expressions.
+
+\section{An elementary word compression estimate}\label{sec:compression}
+
+We first prove the word estimate needed in the construction. All word
+length comparisons in this section are upper bounds.
+
+\begin{lemma}\label{lem:blockcompression}
+Let $l\ge1$ be an integer and let $F_l=\Z^l\rtimes_A\Z$, where $A=I+N$ and
+\[
+ Ne_i=e_{i+1}\quad(1\le i<l),\qquad Ne_l=0.
+\]
+Use the generating set $e_1,\ldots,e_l,t$, where $t$ generates the cyclic
+factor. For every $1\le j\le l$ and every $a\in\Z$,
+\[
+ |ae_j|_{F_l}\le C_l(1+|a|^{1/j}).
+\]
+\end{lemma}
+
+\begin{proof}
+We use descending induction on $j$. It suffices to consider $a>0$:
+inversion handles negative $a$, and $a=0$ is immediate. Put
+$B=\lfloor a^{1/j}\rfloor+1\ge2$. Since $a<B^j$, write
+\[
+ a=\sum_{u=0}^{j-1}a_u B^u,\qquad 0\le a_u<B.
+\]
+The commutator identity
+\[
+ [t^v,x]=(A^v-I)x\qquad(x\in\Z^l)
+\]
+shows that iterated commutators with $u$ copies of $t^B$ and
+$j-1-u$ copies of $t$, applied to $a_ue_1$, represent
+\[
+ x_u=a_u(A^B-I)^uN^{j-1-u}e_1.
+\]
+The operators commute, so their order in the iteration is immaterial.
+Each such word has length $O_l(B)$: its depth is at most $l-1$, and
+every input word has length at most $B$. When $j=1$, this simply means
+the word representing $a_0e_1$.
+
+The first nonzero possible coordinate of $x_u$ is its $e_j$ coordinate,
+which is $a_u B^u$. To control the higher coordinates, expand
+\[
+ A^B-I=\sum_{v=1}^{l-1}\binom Bv N^v.
+\]
+For a contribution to the $e_i$ coordinate with $i>j$, the indices from
+the $u$ factors sum to $i-j+u$. Its coefficient is therefore bounded by
+$C_lB^{1+i-j+u}$, including the digit $a_u$. As $u\le j-1$, this is
+at most $C_lB^i$. Consequently the sum of the $j$ vectors is
+\[
+ \sum_{u=0}^{j-1}x_u=ae_j+\sum_{i>j}b_i e_i,
+ \qquad |b_i|\le C_lB^i,
+\]
+and has a representative of length $O_l(B)$.
+
+For $j=l$ there are no error coordinates, which starts the induction.
+For smaller $j$, the induction hypothesis represents every $b_i e_i$
+with $i>j$ by a word of length $O_l(B)$. Cancel these finitely many
+vectors. They all lie in the abelian subgroup $\Z^l$, so the
+cancellations introduce no further errors. This gives a word of length
+$O_l(B)$ for $ae_j$, as required.
+\end{proof}
+
+\begin{lemma}\label{lem:compression}
+Let $l\ge1$ be an integer and let $K=\Z^l\rtimes_A\Z$, where $A\in\GL_l(\Z)$ is unipotent and
+$N=A-I$ has a single Jordan block over $\Q$. If
+$v\in N^{j-1}\Q^l\cap\Z^l$, where $1\le j\le l$, then
+\[
+ |av|_K\le C_{A,v,S}(1+|a|^{1/j})\qquad(a\in\Z)
+\]
+for every fixed finite generating set $S$ of $K$.
+\end{lemma}
+
+\begin{proof}
+Choose an integral cyclic vector $f_1$ for $N$ and set
+$f_i=N^{i-1}f_1$. These vectors form a rational basis and span a
+finite-index sublattice $F\subset\Z^l$ preserved by $A$ and $A^{-1}$.
+The action on this basis is exactly the action in
+Lemma~\ref{lem:blockcompression}. The subgroup $F\rtimes_A\Z$ thus
+has words for $af_i$ of length $O_l(1+|a|^{1/i})$ in its indicated
+generators. Each of these generators has bounded $S$-length in $K$,
+so the same upper estimates hold in $K$ with a different constant.
+
+The vectors $f_j,\ldots,f_l$ span $N^{j-1}\Q^l$. Hence there is an
+integer $D\ge1$ such that
+$Dv=\sum_{i=j}^l c_i f_i$ with $c_i\in\Z$. Write
+$a=Da_0+b$, where $0\le b<D$. Then
+\[
+ av=\sum_{i=j}^l a_0c_i f_i+bv.
+\]
+Apply the estimates just proved to the terms in the sum, and absorb the
+finitely many possibilities for $bv$ into the constant. Since $i\ge j$,
+each term is bounded by a constant times $1+|a|^{1/j}$.
+\end{proof}
+
+\section{The integral semidirect product}\label{sec:group}
+
+Fix an integer $m\ge4$. Let $V=\Z^m$, with basis $e_1,\ldots,e_m$,
+and define endomorphisms $J,Y$ of $V$ by
+\[
+ Je_i=e_{i+1},\qquad Ye_i=i e_{i+1}\quad(1\le i<m),
+ \qquad Je_m=Ye_m=0.
+\]
+Their matrix commutators satisfy
+\begin{equation}\label{eq:commutator}
+ [Y,J^j]=YJ^j-J^jY=jJ^{j+1}.
+\end{equation}
+Put $M=m!$ and consider the additive group of commuting matrices
+\[
+ W=M\Z J\oplus M\Z J^2\oplus\cdots\oplus M\Z J^{m-1}.
+\]
+Conjugation by $\exp Y$ induces an automorphism $T$ of $W$. Indeed,
+iterating \eqref{eq:commutator} gives
+\begin{equation}\label{eq:T}
+ T(J^j)=\exp(\ad Y)J^j=J^j(1-J)^{-j},\qquad
+ T^{-1}(J^j)=J^j(1+J)^{-j}.
+\end{equation}
+Both expressions are finite integral series, since $J^m=0$.
+
+Define
+\[
+ H=W\rtimes_T\Z,\qquad
+ (P,a)(Q,b)=(P+T^aQ,a+b),
+\]
+and set
+\begin{equation}\label{eq:rho}
+ \rho(P,a)=\exp(P)\exp(aY).
+\end{equation}
+The conjugation identity defining $T$ shows that $\rho$ is a
+representation. It takes values in $\GL_m(\Z)$. For $P\in W$, both
+$\exp(P)$ and $\exp(-P)$ are integral: $P$ is divisible by $M=m!$,
+which clears all factorial denominators in these finite series. Also,
+\begin{equation}\label{eq:expY}
+ \exp(aY)e_i=\sum_{v=0}^{m-i}a^v\binom{i+v-1}{v}e_{i+v}
+\end{equation}
+is integral for every $a\in\Z$, including negative $a$.
+
+Our group is
+\begin{equation}\label{eq:Gm}
+ G(m)=V\rtimes_\rho H,\qquad
+ (v,h)(v',h')=(v+\rho(h)v',hh').
+\end{equation}
+We identify $V$ and $H$ with their natural subgroups of $G(m)$.
+
+\begin{proposition}\label{prop:group}
+The group $G(m)$ is torsion-free and finitely generated, has Hirsch
+length $2m$, and is nilpotent of class $m$. The vector $e_m$ is central.
+\end{proposition}
+
+\begin{proof}
+The successive extensions by the free abelian groups $V$, $W$, and
+$\Z$ prove finite generation and torsion-freeness. Additivity of Hirsch
+length in these extensions gives
+\[
+ h(G(m))=m+(m-1)+1=2m.
+\]
+To see nilpotency, first note that $\rho$ is faithful. If
+$\exp(P)\exp(aY)=I$, then $\exp(P)=\exp(-aY)$. Taking finite
+polynomial logarithms gives $P=-aY$. The first lower diagonal of $P$
+has a constant entry, whereas that of $Y$ has entries $1,\ldots,m-1$.
+As $m\ge4$, this forces $a=0$ and then $P=0$.
+
+It follows that
+\begin{equation}\label{eq:affine}
+ (v,h)\longmapsto
+ \begin{pmatrix}1&0\\v&\rho(h)\end{pmatrix}
+\end{equation}
+is an embedding into the lower unitriangular integer matrices of size
+$m+1$. Thus $G(m)$ has class at most $m$. Let $z=(MJ,0)\in H$.
+The iterated commutator with $m-1$ copies of $z$ and one copy of $e_1$
+is the vector
+\[
+ (\exp(MJ)-I)^{m-1}e_1=M^{m-1}e_m\ne0.
+\]
+It lies in the $m$th term of the ordinary lower central series, proving
+that the class is exactly $m$. Finally, every $\rho(h)$ fixes $e_m$,
+so this vector is central in $G(m)$.
+\end{proof}
+
+Fix the generating set consisting of $e_1,\ldots,e_m$, the elements
+$(MJ^j,0)\in H$ for $1\le j<m$, and the stable letter
+$u=(0,1)\in H$. Until the final step, word lengths refer to this set
+or to its indicated subsets in the relevant subgroups.
+
+\begin{lemma}\label{lem:groupcompression}
+For integers $w,t$ with $1\le w\le m-2$ and $t\ge1$,
+\begin{equation}\label{eq:actinglength}
+ |(M(tJ^w+J^{w+1}),0)|_H\le C_m(1+t^{1/w}).
+\end{equation}
+For every $a\in\Z$,
+\begin{equation}\label{eq:centrallength}
+ |aM^{m-1}e_m|_{G(m)}\le C_m(1+|a|^{1/m}).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+On $W$, the operator $T-I$ has one rational Jordan block. Indeed,
+\eqref{eq:T} gives
+\[
+ (T-I)(MJ^j)=jMJ^{j+1}+\text{higher powers of }J.
+\]
+The chain starting at $MJ$ therefore has successive leading terms
+$M(i-1)!J^i$, for $1\le i<m$. In particular, $MJ^w$ lies in the
+rational image of $(T-I)^{w-1}$. Apply Lemma~\ref{lem:compression}
+to $H=W\rtimes_T\Z$ and add the fixed vector $MJ^{w+1}$ to obtain
+\eqref{eq:actinglength}.
+
+For \eqref{eq:centrallength}, use the subgroup generated by $V$ and
+$z=(MJ,0)\in H$. Its action on $V$ is $\exp(MJ)$, and the difference
+$\exp(MJ)-I$ has one rational Jordan block. Its chain beginning at
+$e_1$ ends in $M^{m-1}e_m$. Lemma~\ref{lem:compression}, with $j=m$,
+gives the desired words in this subgroup, whose generators have bounded
+length in $G(m)$.
+\end{proof}
+
+\section{Short nonconjugate pairs}\label{sec:pairs}
+
+From now on fix integers and a prime satisfying
+\begin{equation}\label{eq:parameters}
+ m\ge4,\qquad
+ L=\left\lceil\frac{m-1}{2}\right\rceil\le w\le m-2,
+ \qquad p>m,
+\end{equation}
+and put $r=m-w$. The group $G(m)$ and the prime $p$ remain fixed.
+For each integer $s\ge1$, define
+\begin{equation}\label{eq:pairs}
+ \begin{gathered}
+ t=p^s,\qquad P_s=MJ^w(tI+J),\\
+ a_s=(0,(P_s,0)),\qquad c_s=M^{m-1}p^{s-1}e_m,\qquad
+ b_s=a_sc_s.
+ \end{gathered}
+\end{equation}
+Here $c_s$ is viewed as a central element of $G(m)$.
+
+\begin{proposition}\label{prop:pairs}
+The elements $a_s$ and $b_s$ are nonconjugate in $G(m)$ and satisfy
+\begin{equation}\label{eq:pairlength}
+ |a_s|,|b_s|\le C_{m,p}p^{s/w}\qquad(s\ge1).
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Lemma~\ref{lem:groupcompression} bounds $|a_s|$ by
+$C_m(1+p^{s/w})$ and $|c_s|$ by $C_m(1+p^{(s-1)/m})$.
+Since $w<m$ and $b_s=a_sc_s$, these bounds imply
+\eqref{eq:pairlength} after enlarging the constant.
+
+For nonconjugacy, write
+\begin{equation}\label{eq:R}
+ R_s=\exp(P_s)-I=P_sB_s,\qquad
+ B_s=\sum_{v=0}^{m-1}\frac{P_s^v}{(v+1)!}.
+\end{equation}
+Every term of $B_s$ is integral because $P_s$ is divisible by $m!$.
+Moreover, $B_s-I$ is nilpotent, so its finite geometric inverse is
+integral. Thus $B_s\in\GL_m(\Z)$ and
+\begin{equation}\label{eq:integralimage}
+ R_sV=P_sV.
+\end{equation}
+
+Put $h_s=(P_s,0)\in H$. If $(v,k)\in G(m)$ conjugates $a_s$ to
+$b_s$, equality in the $H$ coordinate requires
+$kh_sk^{-1}=h_s$. Under this condition the translation coordinate of
+$(v,k)a_s(v,k)^{-1}$ is $(I-\rho(h_s))v=-R_sv$. Conversely, any
+vector in $R_sV$ is obtained in this way by a conjugator in $V$.
+Therefore
+\begin{equation}\label{eq:conjequivalence}
+ a_s\sim_{G(m)}b_s\quad\Longleftrightarrow\quad
+ c_s\in R_sV=P_sV.
+\end{equation}
+
+Let $f=J^w(tI+J)$. Its nonzero square block, from the input
+coordinates $e_1,\ldots,e_r$ to the output coordinates
+$e_{w+1},\ldots,e_m$, is
+\[
+ \begin{pmatrix}
+ t&0&\cdots&0\\
+ 1&t&\ddots&\vdots\\
+ 0&\ddots&\ddots&0\\
+ 0&\cdots&1&t
+ \end{pmatrix}.
+\]
+Solving $fx=k e_m$ over $\Z$ successively gives
+$x_1=\cdots=x_{r-1}=0$ and $t x_r=k$. Hence $k e_m\in fV$ if
+and only if $t$ divides $k$. Since $P_s=Mf$, membership of $c_s$ in
+$P_sV$ would require
+\[
+ p^s\mid M^{m-2}p^{s-1}.
+\]
+This is impossible because $p>m$ and $M=m!$. Equation
+\eqref{eq:conjequivalence} proves the assertion.
+\end{proof}
+
+\section{Lower bounds for arbitrary finite quotients}\label{sec:quotients}
+
+Let $\varphi:G(m)\twoheadrightarrow Q$ be any finite quotient in which
+$\varphi(a_s)$ and $\varphi(b_s)$ are nonconjugate. We shall bound
+$|Q|$ by examining the finite abelian normal subgroup
+$A=\varphi(V)$.
+
+\subsection{The obstruction in the \texorpdfstring{$p$}{p}-primary component}
+
+Conjugation by $\varphi(a_s)$ acts on $A$ as $I+R_s$, so its
+difference from the identity acts as $R_s$. If $\varphi(c_s)$ belonged
+to $R_sA$, an element of $A$ would conjugate $\varphi(a_s)$ to
+$\varphi(b_s)$. Consequently,
+\begin{equation}\label{eq:Aobstruction}
+ \varphi(c_s)\notin R_sA.
+\end{equation}
+On the other hand, there is an exact identity in $V$:
+\begin{equation}\label{eq:pc}
+ R_s(M^{m-2}e_{m-w})=M^{m-1}p^s e_m=p c_s.
+\end{equation}
+To check it, the first application of $P_s$ gives the displayed
+multiple of $e_m$, and every further application is zero.
+
+Let $A_p$ be the $p$-primary component of $A$, and let
+$\pi:V\twoheadrightarrow A_p$ be the composition of $\varphi|_V$
+with the primary projection. Every endomorphism of $A$ preserves its
+primary components. On a component at a prime other than $p$,
+multiplication by $p$ is invertible. Equation~\eqref{eq:pc} thus puts
+the corresponding component of $\varphi(c_s)$ in the image of $R_s$.
+It follows from \eqref{eq:Aobstruction} that
+\begin{equation}\label{eq:pobstruction}
+ \pi(c_s)\notin R_sA_p.
+\end{equation}
+
+For the remaining module calculations, use the ring
+\[
+ \mathcal R=\Z_{(p)}
+ =\{a/b\in\Q:\ a,b\in\Z,\ p\nmid b\}.
+\]
+Any finite abelian $p$-group is naturally an $\mathcal R$-module,
+because multiplication by $b$ is invertible whenever $p\nmid b$.
+The map $\pi$ extends uniquely to a surjective $\mathcal R$-linear map
+$\mathcal R^m\to A_p$. Write $\Lambda$ for its kernel.
+
+\begin{lemma}\label{lem:descent}
+The submodule $\Lambda$ is invariant under $J$ and $Y$. These
+operators therefore induce endomorphisms of $A_p$, and
+\begin{equation}\label{eq:fobstruction}
+ \pi(c_s)\notin fA_p,\qquad f=J^w(tI+J).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The matrices $U=\exp(MJ)$ and $E=\exp(Y)$ are the actions of
+$z=(MJ,0)$ and $u=(0,1)$ in $G(m)$. The kernel $\Lambda$ is
+therefore invariant under both matrices, and hence under $U-I$ and
+$E-I$. Since $(U-I)^m=(E-I)^m=0$, the finite identities
+\[
+ \log U=\sum_{v=1}^{m-1}\frac{(-1)^{v+1}}v(U-I)^v=MJ,
+ \qquad
+ \log E=\sum_{v=1}^{m-1}\frac{(-1)^{v+1}}v(E-I)^v=Y
+\]
+show that $\Lambda$ is invariant under $MJ$ and $Y$: every
+denominator is a unit in $\mathcal R$, because $p>m$.
+As $M$ is also a unit in this ring, $\Lambda$ is invariant under $J$.
+
+The matrices $B_s$ and $B_s^{-1}$ in \eqref{eq:R} are polynomials
+in $J$ with coefficients in $\mathcal R$. They preserve $\Lambda$
+and induce inverse automorphisms of $A_p$. Multiplication by $M$ is
+an automorphism as well. Thus $R_sA_p=P_sA_p=fA_p$, and
+\eqref{eq:pobstruction} gives \eqref{eq:fobstruction}.
+\end{proof}
+
+\subsection{Matrix units forced by the two actions}
+
+For $1\le i,j\le m$, let $E_{j,i}$ denote the matrix sending $e_i$
+to $e_j$ and all other basis vectors to zero.
+
+\begin{lemma}\label{lem:matrixunits}
+If $j-i\ge L=\lceil(m-1)/2\rceil$, then $E_{j,i}$ belongs to the
+associative $\mathcal R$-algebra generated by $J$ and $Y$. In
+particular, it preserves $\Lambda$ and induces an endomorphism of
+$A_p$.
+\end{lemma}
+
+\begin{proof}
+Fix a gap $\ell\ge L$. For $0\le v\le\ell$, the operator
+$J^{\ell-v}Y^v$ sends $e_i$, for $1\le i\le m-\ell$, to
+\[
+ i(i+1)\cdots(i+v-1)e_{i+\ell}.
+\]
+For $v=0$ the coefficient is $1$. The coefficient polynomials are
+monic of degrees $0,\ldots,\ell$, so form an $\mathcal R$-basis
+for the polynomials of degree at most $\ell$.
+
+There are $m-\ell$ active input indices, and
+$m-\ell-1\le\ell$. Given one of these indices $i_0$, the Lagrange
+polynomial
+\[
+ \prod_{\substack{1\le i\le m-\ell\\i\ne i_0}}
+ \frac{X-i}{i_0-i}
+\]
+has degree at most $\ell$ and takes the value $1$ at $i_0$ and $0$
+at every other active index. Its denominators are units in
+$\mathcal R$, since all their nonzero factors have absolute value
+less than $m<p$. Expressing this polynomial in the preceding basis
+gives an $\mathcal R$-linear combination of the operators
+$J^{\ell-v}Y^v$ that is exactly $E_{i_0+\ell,i_0}$. Every inactive
+input index is killed by each of these operators. The final assertion
+follows from Lemma~\ref{lem:descent}.
+\end{proof}
+
+\subsection{Independent characters of large order}
+
+\begin{proposition}\label{prop:quotientbound}
+Under \eqref{eq:parameters}, every finite quotient $Q$ separating
+$a_s$ and $b_s$ satisfies
+\begin{equation}\label{eq:quotientbound}
+ |Q|\ge p^{s(m-w)(w+1-L)}.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+By \eqref{eq:fobstruction}, $\pi(c_s)$ is nonzero in the finite
+abelian group $A_p/fA_p$. Characters into $\Q/\Z$ separate points
+of a finite abelian group: this follows by decomposing the group into
+cyclic summands and using the standard characters on those summands.
+We can therefore choose
+\[
+ \lambda:A_p\longrightarrow\Q/\Z
+\]
+which vanishes on $fA_p$ and satisfies $\lambda(\pi(c_s))\ne0$.
+Write $\bar e_i=\pi(e_i)$, $\lambda_i=\lambda(\bar e_i)$, and
+$\alpha=\lambda_{w+1}$.
+
+The successive nonzero columns of $f=J^w(tI+J)$ give
+\[
+ t\lambda_{w+i}+\lambda_{w+i+1}=0\quad(1\le i<r),
+ \qquad t\lambda_m=0.
+\]
+Thus
+\begin{equation}\label{eq:recurrence}
+ \lambda_{w+i}=(-t)^{i-1}\alpha\quad(1\le i\le r).
+\end{equation}
+Since $c_s=M^{m-1}p^{s-1}e_m$ and $M$ is prime to $p$, the
+nonzero value of $\lambda(\pi(c_s))$, together with
+$p^s\lambda_m=0$, shows that $\lambda_m$ has exactly order $p^s$.
+Equation~\eqref{eq:recurrence} then implies
+\begin{equation}\label{eq:alphaorder}
+ \ord(\alpha)=p^{sr}.
+\end{equation}
+Indeed, $\lambda_m=(-p^s)^{r-1}\alpha$, and every value of a
+character on $A_p$ has order a power of $p$.
+
+Put $q=w+1-L$. For $1\le i\le q$, the gap $w+1-i$ is at least
+$L$, so Lemma~\ref{lem:matrixunits} makes
+\[
+ \chi_i=\lambda\circ E_{w+1,i}
+\]
+a well-defined character of $A_p$. Its values on the generating
+elements $\bar e_j$ are
+\[
+ \chi_i(\bar e_j)=
+ \begin{cases}\alpha,&j=i,\\0,&j\ne i.\end{cases}
+\]
+In particular, each $\chi_i$ has exactly order $p^{sr}$. If
+$\sum_{i=1}^q b_i\chi_i=0$, evaluating on $\bar e_i$ gives
+$b_i\alpha=0$, hence $p^{sr}\mid b_i$ for every $i$. The characters
+$\chi_1,\ldots,\chi_q$ therefore generate a subgroup isomorphic to
+$(\Z/p^{sr}\Z)^q$ in the character group of $A_p$. A finite
+abelian group and its character group have the same order, so
+\[
+ |Q|\ge |A_p|\ge p^{srq}.
+\]
+Since $r=m-w$ and $q=w+1-L$, this is \eqref{eq:quotientbound}.
+\end{proof}
+
+\section{Explicit finite separating quotients}\label{sec:detectors}
+
+The preceding lower bound applies to every finite separating quotient.
+For completeness, the same matrices give a finite separating quotient
+for each selected pair directly.
+
+\begin{proposition}\label{prop:detector}
+The image of the affine representation \eqref{eq:affine} modulo
+$p^{sr}$ is a finite quotient of $G(m)$ in which $a_s$ and $b_s$
+remain nonconjugate.
+\end{proposition}
+
+\begin{proof}
+On $V/p^{sr}V$, define an additive character $\mu$ by
+\[
+ \mu(e_i)=0\quad(1\le i\le w),\qquad
+ \mu(e_{w+i})=\frac{(-p^s)^{i-1}}{p^{sr}}+\Z
+ \quad(1\le i\le r).
+\]
+These values are annihilated by $p^{sr}$, so the character is
+well-defined. The adjacent columns of $f$ give cancellation, and its
+last nonzero column gives
+\[
+ p^s\mu(e_m)=(-1)^{r-1}+\Z=0.
+\]
+Hence $\mu$ vanishes on $fV$, and therefore on
+$R_sV=P_sB_sV=MfB_sV$. In contrast,
+\begin{equation}\label{eq:mudetects}
+ \mu(c_s)=\frac{(-1)^{r-1}M^{m-1}}p+\Z\ne0.
+\end{equation}
+
+Write $E_s=\exp(P_s)$. The matrices of $a_s$ and $b_s$ are
+respectively
+\[
+ \begin{pmatrix}1&0\\0&E_s\end{pmatrix},\qquad
+ \begin{pmatrix}1&0\\c_s&E_s\end{pmatrix}.
+\]
+If their reductions were conjugate in the finite affine image, a
+conjugating matrix would have the form
+$\left(\begin{smallmatrix}1&0\\v&K\end{smallmatrix}\right)$.
+Equality of the lower-right blocks would require
+$KE_sK^{-1}=E_s$ modulo $p^{sr}$. Equality of the translation
+columns would then require
+\[
+ c_s=(I-E_s)v=-R_sv\pmod{p^{sr}V}.
+\]
+Applying $\mu$ contradicts \eqref{eq:mudetects}. Thus this finite
+matrix image separates the pair.
+\end{proof}
+
+\section{Proof of the main theorem}\label{sec:finish}
+
+Fix $d\ge2$, take $m=4d$ and $w=3d$, and set $\Gp_d=G(4d)$.
+These choices satisfy \eqref{eq:parameters}: here
+\[
+ L=2d,\qquad r=d,\qquad w+1-L=d+1.
+\]
+Proposition~\ref{prop:group} gives class $4d$ and Hirsch length
+$8d$. Choose one prime $p>4d$ and keep it fixed. For every $s\ge1$,
+Propositions~\ref{prop:pairs}, \ref{prop:quotientbound}, and
+\ref{prop:detector} give nonconjugate elements with
+\begin{equation}\label{eq:finalpairs}
+ |a_s|,|b_s|\le C p^{s/(3d)},\qquad
+ p^{sd(d+1)}\le D_{\Gp_d}(a_s,b_s)<\infty,
+\end{equation}
+where $C\ge1$ is independent of $s$. For any other fixed finite
+generating set $S$, enlarge $C$ to preserve the first inequality.
+
+Let $n\ge C p^{1/(3d)}$, and choose the largest integer $s\ge1$
+such that $C p^{s/(3d)}\le n$. Maximality gives
+$n<Cp^{(s+1)/(3d)}$. Raising this inequality to the power
+$E_d=3d^2(d+1)$ and using \eqref{eq:finalpairs}, we obtain
+\[
+ \Conj_{\Gp_d,S}(n)
+ \ge p^{sd(d+1)}
+ > C^{-E_d}p^{-d(d+1)}n^{E_d}.
+\]
+This proves the asserted bound for all sufficiently large integers
+$n$, with constants allowed to depend on $d$ and $S$.
+
+Finally, suppose an absolute $C_0$ satisfied
+$\Conj_G(n)\preceq n^{C_0h(G)^2}$ for every group in question.
+Choose $d$ so that $3(d+1)/64>C_0$. In this one fixed group
+$\Gp_d$, the lower exponent $3d^2(d+1)$ is strictly greater than
+$C_0(8d)^2$. The definition of $\preceq$ would bound
+$\Conj_{\Gp_d,S}(n)$ by a constant multiple of
+$n^{C_0(8d)^2}$, contradicting the lower bound as $n\to\infty$.
+This completes the proof of Theorem~\ref{thm:main}.
+
+\begin{remark}
+The source of the exponent is visible in the bidiagonal conjugacy
+equation. A character annihilating $fA_p$ satisfies
+$\lambda_m=(-p^s)^{r-1}\lambda_{w+1}$. Detecting the chosen multiple
+$p^{s-1}e_m$ forces $\lambda_m$ to have order $p^s$, and consequently
+$\lambda_{w+1}$ to have order $p^{sr}$. The second action $Y$,
+together with $J$, supplies the matrix units that reproduce this
+value in $w+1-L$ independent characters. Combining their orders with
+the word estimate of weight $w$ yields the exponent
+$w(m-w)(w+1-L)$. Theorem~\ref{thm:main} uses
+$m=4d$ and $w=3d$; it does not assert an exact growth exponent for
+$\Gp_d$.
+\end{remark}
+
+\begin{thebibliography}{9}
+\bibitem{DV}
+Jonas Der\'e and Lukas Vandeputte,
+\emph{Uniform Upper Bounds for Conjugacy Separability Growth in
+Nilpotent Groups},
+arXiv:2610.03074v1 [math.GR], 2 October 2026.
+\href{https://arxiv.org/abs/2610.03074v1}{\texttt{arxiv.org/abs/2610.03074v1}}.
+\end{thebibliography}
+
+\end{document}

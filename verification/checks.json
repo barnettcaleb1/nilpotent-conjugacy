@@ -1,0 +1,100 @@
+{
+  "scope": "Included Lean components only; the paper's main theorem is not formalized.",
+  "started_at": "2026-10-06T17:43:29.617077+00:00",
+  "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "commands": [
+    {
+      "label": "lean-version",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--version"
+      ],
+      "exit_code": 0,
+      "started_at": "2026-10-06T17:43:29.655680+00:00",
+      "completed_at": "2026-10-06T17:43:30.504640+00:00",
+      "log": "lean-version.log",
+      "log_sha256": "4762d596346ad354e28668de62b7eeae7de5d531b9a7b1c182ca59cfacd81bdd"
+    },
+    {
+      "label": "mathlib-revision",
+      "command": [
+        "git",
+        "-C",
+        ".lake/packages/mathlib",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "started_at": "2026-10-06T17:43:30.505029+00:00",
+      "completed_at": "2026-10-06T17:43:30.513890+00:00",
+      "log": "mathlib-revision.log",
+      "log_sha256": "7cf32a824e26133738b30903ed97bc24def8e93db8039483d6bdf7fce7a0efee"
+    },
+    {
+      "label": "build",
+      "command": [
+        "lake",
+        "build"
+      ],
+      "exit_code": 0,
+      "started_at": "2026-10-06T17:43:30.514304+00:00",
+      "completed_at": "2026-10-06T17:46:02.475791+00:00",
+      "log": "build.log",
+      "log_sha256": "25a2c14db31477e57b2c62606d4c91ff01fbad4fa92705c35f0154e3dc6e0e85"
+    },
+    {
+      "label": "kernel-replay",
+      "command": [
+        "lake",
+        "env",
+        "leanchecker",
+        "-v",
+        "NilpotentConjugacy"
+      ],
+      "exit_code": 0,
+      "started_at": "2026-10-06T17:46:02.476621+00:00",
+      "completed_at": "2026-10-06T17:47:32.935526+00:00",
+      "log": "kernel-replay.log",
+      "log_sha256": "6be7ca751207e5e41ab3c016a2d07b5e3c8ebbbb566ec8fe1dd65f4d5573f8c7"
+    },
+    {
+      "label": "axioms",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DwarningAsError=true",
+        "verification/AxiomAudit.lean"
+      ],
+      "exit_code": 0,
+      "started_at": "2026-10-06T17:47:32.939388+00:00",
+      "completed_at": "2026-10-06T17:47:57.347608+00:00",
+      "log": "axioms.log",
+      "log_sha256": "10b581d000abdd9446bc66dcb816a38f78c46f1f0b5e030815e61f89be828bfc"
+    }
+  ],
+  "allowed_axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "status": "passed",
+  "input_sha256": {
+    "NilpotentConjugacy.lean": "249f900d14130cb389ffad9fa7e0ed7c3fbdc629430566a534e06e6879e0905f",
+    "lakefile.toml": "9e903be0799b0783df1e9e275acd164285d28ea7b6fe985052481f55cd8e3fd2",
+    "lean-toolchain": "3aac669c7a910ec2389f4e4f921b605adf6ebf2d1e0c9b9cd0be4d33f3f5db71",
+    "lake-manifest.json": "5033c6fa76fa4e07ab2b1d3c8219e97a87cafec592c07ea7d1d4dcdfb7614206",
+    "verification/AxiomAudit.lean": "4a92f3afa6d270eca4dbc5dcc3c712a62d81f8e3ffb1d03b848f2513ba374659",
+    "scripts/verify.py": "0c9c546ce019eff6570fa045749c67439c318b7fbac498c191b87827ae8b841c",
+    "NilpotentConjugacy/Bidiagonal.lean": "5060b904b76bba1c13530556866a976dfab9009a12ebf9a1b48f7996bf691527",
+    "NilpotentConjugacy/FiniteCharacters.lean": "145c7fe7f9e0b2e5e513b4eed645669e52633108d2f5941b5e34d1c2d0942d4e",
+    "NilpotentConjugacy/Growth.lean": "e7a77abc8af44609224e554a5c67bbacd93ac87787bb986085b081dbfd9f993c",
+    "NilpotentConjugacy/MatrixUnits.lean": "1eceb5e88df1a242a74ebb046288f350a57de7bd1d1ce412c1ef2f9be0bc4ccd",
+    "NilpotentConjugacy/QuotientModule.lean": "9ab57085aa97495be354b44a3457fc9803e47ee7a2464c704013d0e1de4c48e3"
+  },
+  "source_scan": "passed",
+  "declarations_audited": 161,
+  "completed_at": "2026-10-06T17:47:57.352961+00:00"
+}
