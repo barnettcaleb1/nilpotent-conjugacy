@@ -6,4 +6,4 @@ This draft proposes a family of torsion-free finitely generated nilpotent groups
 
 Prepared with AI assistance. The arguments and claimed results have not yet been independently verified and should be treated as provisional. Comments and corrections are welcome.
 
-A companion Lean package checks selected algebraic lemmas; it does not formally verify the main theorem. Code and verification scope: https://github.com/barnettcaleb1/nilpotent-conjugacy
+The companion Lean package formalizes the explicit lower-bound construction, including the group invariants, finite separating witnesses, and the lower bound in every finite word metric. Its correspondence with the manuscript remains subject to independent review. The cited general conjugacy-separability and upper-bound theorems are outside the formalization. Code, checks, and exact scope: https://github.com/barnettcaleb1/nilpotent-conjugacy

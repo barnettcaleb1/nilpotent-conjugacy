@@ -1,0 +1,14 @@
+{
+  "scope": "Fresh-context AI-assisted source correspondence reviews; not human review or proof premises.",
+  "recorded_at": "2026-10-06T19:24:39.153322+00:00",
+  "base_manifest": "candidate-v1-manifest.json",
+  "final_manifest": "candidate-v2-manifest.json",
+  "changes": "v2 adds the exact NoQuadraticBound source accepted by the delta review and its aggregate import; changes verification concurrency only. All v1 mathematical modules remain byte-identical.",
+  "files": {
+    "candidate-v1-manifest.json": "914c6fcdfcb6b73393cf9e9d405ea81b3a36ddab8bea86ccba4a8543b3be59e7",
+    "candidate-v2-manifest.json": "ef2870af30ed4bde27e12cfbe1eb3183819c6e6c93df7b0047e9aed585cdc3b2",
+    "group-quotient-semantic-review-v1.md": "45eb19acc6fa977d8c86bf4767d7f21ba8b107cd2c23d73d5b156d113eb71ef0",
+    "main-semantic-review-v1.md": "90df17c6dc08640cdcf205a74fc0392c3d792df81e715d1af602b78a827d62c4",
+    "no-quadratic-semantic-delta-v1.md": "2db438d2ac8dfb529322208565c476ee7aef9de1ad017884d051ab08c2338608"
+  }
+}

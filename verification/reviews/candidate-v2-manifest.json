@@ -1,88 +1,8 @@
 {
-  "scope": "Included Lean declarations; see CubicTheorem.lean and VERIFICATION.md for the mathematical scope and external results not included.",
-  "started_at": "2026-10-06T19:24:11.980558+00:00",
-  "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
-  "lean_num_threads": "2",
-  "commands": [
-    {
-      "label": "lean-version",
-      "command": [
-        "lake",
-        "env",
-        "lean",
-        "--version"
-      ],
-      "exit_code": 0,
-      "started_at": "2026-10-06T19:24:12.078600+00:00",
-      "completed_at": "2026-10-06T19:24:15.676955+00:00",
-      "log": "lean-version.log",
-      "log_sha256": "4762d596346ad354e28668de62b7eeae7de5d531b9a7b1c182ca59cfacd81bdd"
-    },
-    {
-      "label": "mathlib-revision",
-      "command": [
-        "git",
-        "-C",
-        ".lake/packages/mathlib",
-        "rev-parse",
-        "HEAD"
-      ],
-      "exit_code": 0,
-      "started_at": "2026-10-06T19:24:15.678125+00:00",
-      "completed_at": "2026-10-06T19:24:15.692220+00:00",
-      "log": "mathlib-revision.log",
-      "log_sha256": "7cf32a824e26133738b30903ed97bc24def8e93db8039483d6bdf7fce7a0efee"
-    },
-    {
-      "label": "build",
-      "command": [
-        "lake",
-        "build"
-      ],
-      "exit_code": 0,
-      "started_at": "2026-10-06T19:24:15.693708+00:00",
-      "completed_at": "2026-10-06T19:25:40.519429+00:00",
-      "log": "build.log",
-      "log_sha256": "a23377729e02f5fa3083640f91ed6ca4b31be083e21e192313507442d8e6b14e"
-    },
-    {
-      "label": "kernel-replay",
-      "command": [
-        "lake",
-        "env",
-        "leanchecker",
-        "-v",
-        "NilpotentConjugacy"
-      ],
-      "exit_code": 0,
-      "started_at": "2026-10-06T19:25:40.521733+00:00",
-      "completed_at": "2026-10-06T19:31:09.105560+00:00",
-      "log": "kernel-replay.log",
-      "log_sha256": "457f1a769e2345e042e30a86bbc0c3d1b0d4b5df5e4bbbd15b63f0a11f931f80"
-    },
-    {
-      "label": "axioms",
-      "command": [
-        "lake",
-        "env",
-        "lean",
-        "-DwarningAsError=true",
-        "verification/AxiomAudit.lean"
-      ],
-      "exit_code": 0,
-      "started_at": "2026-10-06T19:31:09.109711+00:00",
-      "completed_at": "2026-10-06T19:31:45.570701+00:00",
-      "log": "axioms.log",
-      "log_sha256": "30e1109cd7c30d669dce38c3a8907d75deb232ebf858c85bbbd0cf7cdd85b5fc"
-    }
-  ],
-  "allowed_axioms": [
-    "propext",
-    "Classical.choice",
-    "Quot.sound"
-  ],
-  "status": "passed",
-  "input_sha256": {
+  "frozen_at": "2026-10-06T19:24:11.874439+00:00",
+  "base_manifest_sha256": "914c6fcdfcb6b73393cf9e9d405ea81b3a36ddab8bea86ccba4a8543b3be59e7",
+  "delta": "Add exactly reviewed NoQuadraticBound module, import it, and limit verification concurrency. Other mathematical files unchanged.",
+  "files": {
     "NilpotentConjugacy.lean": "ace4aa1ca5bb8bd1255e965390b6bf37217e170043a24e5baa1ae40caca32d2d",
     "lakefile.toml": "9e903be0799b0783df1e9e275acd164285d28ea7b6fe985052481f55cd8e3fd2",
     "lean-toolchain": "3aac669c7a910ec2389f4e4f921b605adf6ebf2d1e0c9b9cd0be4d33f3f5db71",
@@ -119,8 +39,5 @@
     "NilpotentConjugacy/WordCompression.lean": "adebff1dc2295cf0e5a63f010ea3fe83ee5aa0df84f4c5a2c4839c8eaf9968a6",
     "NilpotentConjugacy/WordGeneration.lean": "0ff55c66abdd49480810bddebf79e952c9e4cafd57659feb374f995d309761ef",
     "NilpotentConjugacy/WordLength.lean": "297f8aff851456b8607a4c11fe027cc183f115273649e3528eb5dcc214f0a89c"
-  },
-  "source_scan": "passed",
-  "declarations_audited": 1079,
-  "completed_at": "2026-10-06T19:31:45.580534+00:00"
+  }
 }

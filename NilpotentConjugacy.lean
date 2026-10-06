@@ -1,9 +1,34 @@
+import NilpotentConjugacy.AffineGroup
 import NilpotentConjugacy.Bidiagonal
+import NilpotentConjugacy.ConjugacyDepth
+import NilpotentConjugacy.ConjugacyGrowth
+import NilpotentConjugacy.CubicTheorem
+import NilpotentConjugacy.DescentGroupImage
+import NilpotentConjugacy.DescentLocalization
 import NilpotentConjugacy.FiniteCharacters
-import NilpotentConjugacy.MatrixUnits
+import NilpotentConjugacy.GroupClass
+import NilpotentConjugacy.GroupProperties
+import NilpotentConjugacy.GroupQuotientBound
+import NilpotentConjugacy.GroupSeries
 import NilpotentConjugacy.Growth
+import NilpotentConjugacy.IntegralGroup
+import NilpotentConjugacy.IntegralGroupAction
+import NilpotentConjugacy.JordanCompression
+import NilpotentConjugacy.MatrixUnits
+import NilpotentConjugacy.NoQuadraticBound
+import NilpotentConjugacy.PairFiniteQuotient
+import NilpotentConjugacy.PairNonconjugacy
+import NilpotentConjugacy.PairWordLength
+import NilpotentConjugacy.QuotientDescent
 import NilpotentConjugacy.QuotientModule
+import NilpotentConjugacy.SemidirectConjugacy
+import NilpotentConjugacy.SpecialPairs
+import NilpotentConjugacy.Unitriangular
+import NilpotentConjugacy.WeightedCompression
+import NilpotentConjugacy.WordCompression
+import NilpotentConjugacy.WordGeneration
+import NilpotentConjugacy.WordLength
 
-/-! Selected algebraic components of the unverified nilpotent-conjugacy draft.
-The main group and growth theorem is not formalized in this package.
+/-! Formalization of the explicit cubic lower-bound construction.
+See CubicTheorem and VERIFICATION.md for the exact checked statement and scope.
 -/

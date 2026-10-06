@@ -1,10 +1,28 @@
 {
-  "recorded_at": "2026-10-06T17:49:20.800772+00:00",
-  "compiler": "Codex built-in standalone LaTeX compiler",
-  "status": "success",
-  "scope": "Both exact sources compiled. No separate PDF export or rendered-page inspection is claimed.",
-  "documents": {
-    "paper/preprint.tex": "1e86378f86d0782e1ffd5866204a8a9c41ee8c3ea23f1e8a7ad9f41192309cf1",
-    "paper/exposition.tex": "beb6cb8953bfbae63b2b88c6fc59561412d6c849b2f45c183406962619f75f61"
-  }
+  "compiler": "Codex built-in standalone compiler",
+  "checked_at": "2026-10-06T19:23:25.954444+00:00",
+  "documents": [
+    {
+      "path": "paper/preprint.tex",
+      "sha256": "483128b79926fdb104fafbfd9c6f3c034a99f2c83330435214b7e1664db31395",
+      "status": "success",
+      "compiler_response": {
+        "path": "/Users/calebbarnett/Documents/ChatGPT/Kalantar Problem/research/nilpotent-conjugacy/result.tex",
+        "kind": "success",
+        "message": "The current source compiled successfully with the desktop editor's compiler."
+      }
+    },
+    {
+      "path": "paper/exposition.tex",
+      "sha256": "1d18cd561a4f8edac6616361f8e83d52935a300cf9720312730a54adcf8d507f",
+      "status": "success",
+      "compiler_response": {
+        "path": "/Users/calebbarnett/Documents/ChatGPT/Kalantar Problem/research/nilpotent-conjugacy/result-expository.tex",
+        "kind": "success",
+        "message": "The current source compiled successfully with the desktop editor's compiler."
+      }
+    }
+  ],
+  "rendered_page_inspection": false,
+  "note": "Updated formalization scope notices only. Existing editor retained; no separate PDF exported."
 }

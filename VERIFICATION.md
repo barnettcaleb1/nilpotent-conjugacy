@@ -1,65 +1,80 @@
 # Verification scope
 
-## Status
+## What is formalized
 
-This is a partial formalization accompanying an **unverified research draft**. Lean checking establishes the propositions expressed by the included Lean declarations, subject to their explicit hypotheses and the standard Lean axioms. It does not establish that the manuscript's main theorem has been formalized, that the paper is correct, or that its claims are new.
+[`cubicFamily_main`](NilpotentConjugacy/CubicTheorem.lean) proves the explicit cubic lower-bound construction. Its group is `ManuscriptGroup (4*d)`, the actual integral semidirect product from the paper, with its exponential action proved to exist. The statement assumes only the integer parameter restriction `2 ≤ d`.
 
-The paper's proposed main claim is the existence, for every integer $d\ge2$, of a torsion-free finitely generated nilpotent group of class $4d$, Hirsch length $8d$, and conjugacy-separation growth bounded below by a positive multiple of $n^{3d^2(d+1)}$ for all sufficiently large integer radii in every fixed finite word metric.
+It concludes finite generation, torsion-freeness, nilpotence, exact nilpotency class `4*d`, and an actual subnormal series with `8*d` infinite cyclic quotients. It also proves that finite word generating sets exist and that **every** such generating set has the stated polynomial lower bound.
 
-**No Lean declaration in this release states and proves that claim.**
+More precisely, put $E=3d^2(d+1)$. For every finite generating set $S$, there are positive integers $C,N$ such that, for every integer $n\ge N$, there are actual elements $a,b$ with
 
-## Correspondence with the paper
+$$
+|a|_S,|b|_S\le n,\qquad a\not\sim b,\qquad
+D_G(a,b)<\infty,\qquad n^E\le C D_G(a,b).
+$$
 
-### Integral bidiagonal arithmetic and finite detection
+Here $D_G(a,b)$ is the infimum of the orders of **actual finite separating group quotients**. Finite depth is part of the conclusion, so the lower estimate is not obtained from an infinite value. `conjugacyDepth_attained` proves that a finite depth is attained by an actual quotient. The resulting bound on the supremum of depths in the word ball is `cubicFamily_polynomialConjugacyLower`.
 
-`last_mem_bidiagonal_range_iff` proves that the final coordinate vector with coefficient $k$ lies in the image of the integral lower bidiagonal map $tI+J$, for $t\ne0$, exactly when $t\mid k$. Its dimension is `n + 1`, the paper's tail length $r$.
+The manuscript remains a research draft pending independent review. No literature-priority claim follows from these checks, and the whole paper, including its cited external results, is not claimed to be formalized.
 
-`bidiagonal_recurrence_exact_order` proves the exact order $p^{s(n+1)}$ from adjacent recurrence, terminal annihilation by $p^s$, and a detected multiple of the last term. The finite detector is an actual linear map on `ZMod (p^(s*(n+1)))` coordinates; its annihilation and nonzero value are proved for arbitrary permitted parameters. The formal detector codomain is this residue ring rather than $\mathbb Q/\mathbb Z$; identifying the two descriptions and embedding it in the manuscript's affine group quotient remain separate tasks.
+## Conventions and correspondence
 
-### Matrix units
+### Group and structural invariants
 
-The indices in `MatrixUnits.lean` are zero based. A matrix's row is its output coordinate and its column is its input coordinate. Thus `shiftJ` and `shiftY` implement the paper's $Je_i=e_{i+1}$ and $Ye_i=i e_{i+1}$ after shifting the index by one.
+`IntegralGroup.lean` constructs integer exponential matrices and their units. `IntegralGroupAction.lean` proves the full action law, including negative integer parameters, and defines
 
-`matrixUnit_mem_of_gap` proves the interpolation conclusion for a commutative ring with explicit unit hypotheses on every denominator. `matrixUnit_mem_primeLocal_adjoin` specializes to the localization at the prime ideal $(p)\subset\mathbb Z$, with $p>m$, and gaps at least `m / 2`. This is the paper's threshold $\lceil(m-1)/2\rceil$.
+$$
+G(m)=\mathbb Z^m\rtimes\bigl(\mathbb Z^{m-1}\rtimes\mathbb Z\bigr).
+$$
 
-`matrixUnit_preserves_primeLocal` proves preservation of any submodule that is already invariant under both shifts. It does **not** prove that the kernel obtained from a finite quotient of the manuscript's group is invariant under those shifts. Recovering the shifts from the integral exponential actions is an additional obligation.
+The coefficient lattice is identified with $W=m!\mathbb ZJ+\cdots+m!\mathbb ZJ^{m-1}$ by an injective polynomial map. Its cyclic action is the paper’s $\exp(\operatorname{ad}Y)$. `GroupProperties.lean` proves the faithful representation and its equivalence with the generated matrix group. The affine embedding, explicit unitriangular central filtration, and nonzero final commutator establish torsion-freeness and exact class $m$.
 
-### Finite-character bound
+`InfiniteCyclicSubnormalSeries` records genuine nested normal subgroups and explicit isomorphisms from their actual quotients to the infinite cyclic group. `manuscriptGroup_infiniteCyclicSubnormalSeries` constructs $2m$ such factors. This is the series certificate for Hirsch length $2m$. A separate canonical numeric Hirsch-length API and its general invariance theorem have not been introduced.
 
-`exists_detecting_character` constructs a character into `AddCircle (1 : ℚ)`, representing $\mathbb Q/\mathbb Z$, which vanishes on a specified subgroup and detects an element outside it.
+### Words and compression
 
-`finite_cardinality_of_delta_characters` proves $N^q\le |A|$ by an explicit injection of the coefficient grid into a finite abelian group $A$. It uses delta evaluations with a common value of exact order $N$; the cardinality bound is a conclusion, not a hypothesis. This direct counting route avoids the paper's appeal to equality of the orders of a finite abelian group and its dual.
+`WordRep` is a list of generators or their inverses whose product equals the specified element. `wordLength` is the minimum such length. `wordGeneratingSet_iff_finitelyGenerated` proves equivalence with the usual subgroup-closure definition of finite generation, and `wordLength_compare` proves comparison between finite generating sets.
 
-`finite_quotient_character_bound` proves $p^{srq}\le |A|$ from positive $s,r$, a subgroup $H\le A$, bidiagonal columns modulo $H$, a terminal annihilation relation, a terminal obstruction, and actual additive endomorphisms with the required delta values. `ambient_finite_quotient_character_bound` transfers the result through an explicit injection $A\to Q$ with $Q$ finite. The ambient $Q$ is just a finite type in this last lemma; no group construction or conjugacy assertion is silently attached to it.
+The compression proof constructs nested commutator words, assembles base digits, bounds every higher coefficient, and cancels the higher coordinates by descending induction. The actual weighted exponential actions are handled integrally: their cyclic-chain vectors have factorial leading coefficients, and a proved fixed-power transfer clears these factors. This supplies the needed coordinate bounds without assuming the paper’s general rational Jordan-block compression lemma.
 
-### Actual finite module quotients
+The formal proof uses the subsequence $s=wk$ and radius proportional to $p^k$. This avoids real roots and preserves the exponent $w(m-w)(w+1-\lfloor m/2\rfloor)$. All constants may depend on the fixed group, prime, and generating set; none depends on $k$ or the radius.
 
-`QuotientModule.lean` joins the matrix and character arguments on the actual quotient $A=(R^m)/S$, where $R=\mathbb Z_{(p)}$. It defines the induced linear endomorphisms and derives their coordinate values.
+### Arbitrary finite quotients
 
-`primeLocal_quotient_cardinality` assumes $p>m\ge4$, $\lfloor m/2\rfloor\le w\le m-2$, $s>0$, finiteness of this quotient, invariance of $S$ under both shifts, and nonmembership of $D p^{s-1}\overline e_m$ in the image of the actual induced operator $J^w(p^sI+J)$. It proves $p^{s(m-w)(w+1-\lfloor m/2\rfloor)}\le |A|$. The floor is Lean's natural-number division. The delta endomorphisms and bidiagonal columns are derived rather than assumed in this theorem. The multiplier $D$ is an arbitrary natural number; the obstruction hypothesis itself supplies the required nonvanishing.
+`SemidirectConjugacy.lean` proves the conjugacy criterion against every possible conjugator. `DescentGroupImage.lean` constructs the finite abelian normal image from an arbitrary homomorphism to a finite group. `DescentLocalization.lean` constructs its actual localization and relation kernel, proves finiteness and cardinality control, and preserves the detected obstruction.
 
-The passage from a separating group quotient to such an invariant submodule and obstruction remains outside the formalization.
+`QuotientDescent.lean` recovers $J,Y$ from the integral exponential actions using nilpotent polynomial inversion over the actual ring $\mathbb Z_{(p)}$. No rational vector-space structure is imposed on a finite group. Matrix-unit interpolation and detecting characters then give the cardinality estimate.
 
-### Growth arithmetic
+`specialPair_finite_quotient_cardinality` applies this argument to every finite homomorphism separating the specified pair; surjectivity, a semidirect-product structure on the quotient, and a primary-group hypothesis are not assumed. The lower bound is $p^{s(m-w)(w+1-\lfloor m/2\rfloor)}$.
 
-`specialized_exponent`, `specialized_parameters`, `cubic_degree_lower`, and `degrees_exceed_every_quadratic` verify the numerical specialization $m=4d,w=3d$, the proposed cubic degree, and its comparison with every fixed quadratic coefficient.
+### Nonconjugacy and finite detection
 
-`geometric_polynomial_lower` proves an all-radius bound for a real-valued function from a hypothesis that supplies a lower bound at every sufficiently large radius above each geometric scale. This hypothesis must still be established for the manuscript's conjugacy-separation growth function. The lemma does not define that function or construct short words in a group.
+`SpecialPairs.lean` defines the exact elements and their coordinate formulas. `PairNonconjugacy.lean` proves nonconjugacy in the original group by integral divisibility. `PairFiniteQuotient.lean` reduces the actual group modulo $p^{s(m-w)}$ into a finite affine group, proves separation there against all conjugators, and restricts the homomorphism to its range to obtain a surjective finite quotient. Thus each selected pair has finite separating depth independently of any general conjugacy-separability theorem.
 
-## Obligations still outside Lean
+### Depth and growth
 
-1. Construct the integral groups $G(m)$, prove the action law and integrality of their exponential matrices, and establish finite generation, torsion-freeness, nilpotency class $m$, and Hirsch length $2m$.
-2. Formalize word length for the specified generating sets and prove the constructive compression estimates, including the rational Jordan-block lattice reduction and constants uniform in the sequence parameter.
-3. Construct the selected group elements, prove their nonconjugacy, and connect their word lengths to the geometric scales used in the growth argument.
-4. Starting from **every** finite separating group quotient, obtain the finite abelian primary component and its localized module structure; prove the obstruction survives and that its kernel is invariant under $J,Y$. This includes the truncated logarithm argument and equality of the relevant operator images.
-5. Apply the finite residue-ring detector inside the actual affine group quotient and prove that separation holds against every possible conjugator.
-6. Define the conjugacy-separation depth and growth function, connect the formal algebra to those definitions, transfer between finite generating sets, and complete the all-radius main theorem and the comparison relation used in the paper.
-7. Formalize the cited external upper bound and its application to the cubic envelope, if that corollary is to be included in a full formal verification.
+`FiniteGroupQuotient` contains an actual finite group, its group instance, a homomorphism, and a surjectivity proof. Quotient order is `Nat.card` of that carrier. `conjugacyDepth` takes the infimum of those orders over separating quotients; the empty infimum is infinity. `conjugacyGrowth` takes the supremum over actual nonconjugate pairs in a finite word ball, with baseline value one.
 
-These are substantive missing formal proofs. They are not discharged by compilation, arithmetic examples, source scans, or an AI-assisted correspondence review. The draft's independent mathematical verification and its literature priority remain pending.
+The growth codomain is the extended naturals, allowing the definitions to precede a global conjugacy-separability theorem. `FiniteDepthPolynomialWitness`, used in the main theorem, explicitly rules out infinite depths as its witnesses. `conjugacyGrowth_lt_top` proves finiteness of growth under the usual conjugacy-separability hypothesis; that hypothesis is not used to obtain the lower-bound witnesses.
+
+### No universal quadratic exponent
+
+`NoQuadraticBound.lean` defines the manuscript's polynomial comparison, including its positive integer prefactor and radius rescaling. Its real-exponent upper predicate explicitly requires finite growth before applying `toNat`. `no_universal_quadratic_exponent` proves that for every real $A$, there is $d\ge2$ such that, in every finite word metric of the same constructed group, this comparison fails for exponent $A(8d)^2$. The parameter is chosen before the word metric. The actual cyclic-series certificate justifies the count $8d$.
+
+The proof first shows that an actual lower bound of integer degree $E$ contradicts any upper comparison of smaller integer degree, with all constants and the radius threshold retained. It then majorizes $A$ by an integer and uses monotonicity of real powers. This is a consequence about the actual growth function, rather than only an inequality between candidate exponents.
+
+## Remaining scope
+
+- The cited general theorem that finitely generated nilpotent groups are conjugacy separable is not formalized here. In particular, this package does not prove that **every** nonconjugate pair in the constructed group has finite depth. It proves this for all pairs used in the lower bound.
+- The cited universal upper bound and the paper’s full cubic-envelope corollary are not formalized.
+- The concrete-pair theorem uses $m\le2w$. This includes $m=4d,w=3d$ and proves the main family, but omits the paper’s odd-dimensional boundary case $w=(m-1)/2$.
+- The general rational single-Jordan-block compression statement is not formalized in its full generality. All coordinate compression needed for the constructed family is proved directly.
+- The exact conjugacy growth of these groups, literature priority, and independent human review remain open questions or external tasks.
+
+These limits do not supply assumptions to `cubicFamily_main`; they delimit which other assertions of the paper are included.
 
 ## Trust and reproducibility
 
-The package pins Lean and Mathlib. Its source check rejects admissions, user-declared axioms, unsafe declarations, and `native_decide` in mathematical modules. The axiom audit examines transitive dependencies, including imported declarations, and permits only Lean's standard `propext`, `Classical.choice`, and `Quot.sound`.
+The package pins Lean and Mathlib. `scripts/verify.py` imports every mathematical module, builds with warnings as errors, replays compiled declarations through Lean’s kernel, rejects admissions, custom axioms, unsafe declarations and `native_decide`, and checks transitive axioms of public and private package declarations. Only `propext`, `Classical.choice`, and `Quot.sound` are allowed.
 
-The checker, elaborator, standard library, Mathlib, and build environment still form part of the verification setting. The axiom audit checks the formal dependency boundary; correspondence with the informal statement requires a separate mathematical review. No external human review is claimed.
+The run record includes exact source hashes and command outcomes. The compiler, kernel, libraries, and build environment form the verification setting. A fresh-context AI-assisted semantic review can check correspondence but is not independent human review or a premise of any Lean proof.

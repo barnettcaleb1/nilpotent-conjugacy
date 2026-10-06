@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reproduce checks for the included Lean components, not the full paper."""
+"""Reproduce kernel and axiom checks for the included Lean package."""
 from __future__ import annotations
 
 import datetime as dt
@@ -15,12 +15,15 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / ".verification-local"
 OUT.mkdir(exist_ok=True)
+# Limit concurrent kernel replays on memory-constrained machines.
+os.environ.setdefault("LEAN_NUM_THREADS", "2")
 EXPECTED_LEAN = "4.33.1"
 EXPECTED_MATHLIB = "0df444a360eaa60ab8c11dca51a86af692955474"
 record = {
-    "scope": "Included Lean components only; the paper's main theorem is not formalized.",
+    "scope": "Included Lean declarations; see CubicTheorem.lean and VERIFICATION.md for the mathematical scope and external results not included.",
     "started_at": dt.datetime.now(dt.timezone.utc).isoformat(),
     "platform": platform.platform(),
+    "lean_num_threads": os.environ["LEAN_NUM_THREADS"],
     "commands": [],
     "allowed_axioms": ["propext", "Classical.choice", "Quot.sound"],
     "status": "running",
@@ -135,7 +138,7 @@ try:
     if record["input_sha256"] != inputs():
         raise RuntimeError("Inputs changed during verification")
     record["status"] = "passed"
-    print("Lean components passed. The paper's main theorem remains unverified.")
+    print("Lean package passed. Consult VERIFICATION.md for the exact mathematical scope.")
 except Exception as error:
     record["status"] = "failed"
     record["error"] = str(error)

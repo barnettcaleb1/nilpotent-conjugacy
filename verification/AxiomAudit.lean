@@ -11,7 +11,8 @@ open Lean in
 run_cmd do
   let env ← getEnv
   let names := env.constants.fold (init := #[]) fun acc name _ =>
-    if (`NilpotentConjugacy).isPrefixOf name then acc.push name else acc
+    if (`NilpotentConjugacy).isPrefixOf name ||
+        name.toString.startsWith "_private.NilpotentConjugacy." then acc.push name else acc
   if names.isEmpty then
     throwError "No NilpotentConjugacy declarations found"
   let allowed := #[`propext, `Classical.choice, `Quot.sound]
